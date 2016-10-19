@@ -7,10 +7,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const file = require("./file");
-const path = require("path");
-// import euiParser = require("./parser");
+
+/**
+ * Created by jackyanjiaqi on 16/7/4.
+ */
+//import xml = require("./xml/index")
 const CONFIG = require("./config");
+const path = require("path");
+//全局配置项目根目录
+CONFIG.setDir(path.join(__dirname, "../"));
+const file = require("./file");
+// import euiParser = require("./parser");
 const exml_service = require("./exml-service/componentScanner");
 const themeParser = require("./themeParser");
 const exmlParser = require("./eui/parser/EXMLParser");
@@ -42,10 +49,8 @@ parser.addIds = function(items) {
 };
 
 function run() {
-    return __awaiter(this, void 0, void 0, function* () {        
+   return __awaiter(this, void 0, void 0, function* () {
         console.log(__dirname);
-        //配置项目根目录
-        CONFIG.setDir(path.join(__dirname, "../"));
         //解析参数
         let args = process.argv.slice(2);
         if ("clean" === args[0]) {
@@ -98,15 +103,18 @@ function run() {
                         delete exmlItem.className;
                         //恢复exmlItem.content
                         if (!exmlItem.content) {
-                            exmlItem.content = file.read(path.join(CONFIG.getReleaseDir(), exmlItem.path));
+                            exmlItem.content = file.read(path.join(CONFIG.getProjectDir(), exmlItem.path));
                         }
                         ishandled = true;
                     }
                     else {
+                        console.log("parsing:", exmlItem.path);
                         exmlItem.gjs = parser.parse(exmlItem.content);
                         //测试用
-                        // if(exmlItem.path.indexOf("TPanel.exml")!==-1 ||
-                        //     exmlItem.path.indexOf("TestListItem.exml")!==-1){
+                        // if(
+                        //     // exmlItem.path.indexOf("TPanel.exml")!==-1 ||
+                        //     exmlItem.path.indexOf("SendToDesktopAlertSkin.exml")!==-1
+                        // ){
                         //     console.log(exmlItem.gjs);
                         // }
                         exmlItem.className = parser.className;
